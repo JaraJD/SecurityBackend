@@ -1,7 +1,6 @@
 package Backend.Controladores;
 
 import Backend.Modelos.Permiso;
-import Backend.Modelos.Rol;
 import Backend.Repositorios.RepositorioPermiso;
 
 import org.springframework.beans.factory.annotation.Autowired;

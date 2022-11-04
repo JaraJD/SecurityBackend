@@ -1,6 +1,8 @@
 package Backend.Controladores;
 
+import Backend.Modelos.Rol;
 import Backend.Modelos.Usuario;
+import Backend.Repositorios.RepositorioRol;
 import Backend.Repositorios.RepositorioUsuario;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -16,6 +18,9 @@ import java.util.List;
 public class ControladorUsuario {
     @Autowired
     private RepositorioUsuario miRepositorioUsuario;
+
+    @Autowired
+    private RepositorioRol miRepositorioRol;
 
     @GetMapping("")
     public List<Usuario> index(){
@@ -79,4 +84,28 @@ public class ControladorUsuario {
         }
         return sb.toString();
     }
+
+    /**
+     * Relación (1 a n) entre rol y usuario
+     * @param id
+     * @param id_rol
+     * @return
+     */
+    @PutMapping("{id}/rol/{id_rol}")
+    public Usuario asignarRolAUsuario(@PathVariable String id,@PathVariable String id_rol){
+        Usuario usuarioActual=this.miRepositorioUsuario
+                .findById(id)
+                .orElse(null);
+        Rol rolActual=this.miRepositorioRol
+                .findById(id_rol)
+                .orElse(null);
+        if (usuarioActual!=null && rolActual!=null){
+            usuarioActual.setRol(rolActual);
+            return this.miRepositorioUsuario.save(usuarioActual);
+        }else{
+            return null;
+        }
+
+    }
+
 }
